@@ -1,1 +1,2 @@
-"" 
+# Tesseract Example
+A while ago I managed to write a raymarching algorithm to render 4D objects based on a given distance formula. That method was both in-efficient (as it requires a distance estimator) and slow (because it used raytracing).
