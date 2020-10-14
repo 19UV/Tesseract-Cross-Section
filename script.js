@@ -7,6 +7,8 @@ import { createShader, createProgram } from "./modules/shader_build.js";
 var verts = [];
 var tets = [];
 
+const RAD_360 = 2*Math.PI;
+
 const COLOR = {
   "RED": [1,0,0], // 255, 0, 0
   "ORANGE": [1, 0.6, 0], // 255,165,0
@@ -249,6 +251,14 @@ function render() {
   r_YW += 0.001;
   r_ZW += 0.005
   // W_LEVEL = Math.sin((new Date()).getTime() / 1000);
+  
+  // Should Fix Some Floating Point Errors
+  if (r_XY > RAD_360) r_XY -= RAD_360;
+  if (r_XZ > RAD_360) r_XZ -= RAD_360;
+  if (r_YZ > RAD_360) r_YZ -= RAD_360;
+  if (r_XW > RAD_360) r_XW -= RAD_360;
+  if (r_YW > RAD_360) r_YW -= RAD_360;
+  if (r_ZW > RAD_360) r_ZW -= RAD_360;
 
   var tri_count = 0; var quad_count = 0;
   
