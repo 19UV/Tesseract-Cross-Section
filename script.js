@@ -1,5 +1,7 @@
 "use strict";
 
+console.log("TESSERACT EXAMPLE v2.0.1");
+
 import { Lerp } from "./modules/func.js";
 import { mult_mat_vec } from "./modules/math.js";
 import { createShader, createProgram } from "./modules/shader_build.js";
@@ -39,97 +41,87 @@ Vertex Constructor
 4 floats: Normal
 */
 
-function tess_const_verts() {
-  for (var i=0;i<16;i++) {
-    var a = (Math.ceil(i/2)%2)?-1:1;
-    var b = (Math.ceil((i+1)/2)%2)?1:-1;
-    var c = (Math.ceil((i+1)/4)%2)?1:-1;
-    var d = (Math.ceil((i+1)/8)%2);
-    verts.push([a,b,c,d?1:-1,d,0,Math.abs(1-d)]);
-  }
-}
-
 verts = new Array(16*4);
-verts[ 0] = [ 1, 1, 1, 1, ...COLOR.L_GREEN]; // Right
-verts[ 1] = [ 1, 1, 1, 1, ...COLOR.RED]; // Top
-verts[ 2] = [ 1, 1, 1, 1, ...COLOR.YELLOW]; // Front
-verts[ 3] = [ 1, 1, 1, 1, ...COLOR.BLUE]; // Inner
+verts[ 0] = [ 1, 1, 1, 1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[ 1] = [ 1, 1, 1, 1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[ 2] = [ 1, 1, 1, 1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[ 3] = [ 1, 1, 1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[ 4] = [-1, 1, 1, 1, ...COLOR.ORANGE]; // Left
-verts[ 5] = [-1, 1, 1, 1, ...COLOR.RED]; // Top
-verts[ 6] = [-1, 1, 1, 1, ...COLOR.YELLOW]; // Front
-verts[ 7] = [-1, 1, 1, 1, ...COLOR.BLUE]; // Inner
+verts[ 4] = [-1, 1, 1, 1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[ 5] = [-1, 1, 1, 1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[ 6] = [-1, 1, 1, 1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[ 7] = [-1, 1, 1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[ 8] = [-1,-1, 1, 1, ...COLOR.ORANGE]; // Left
-verts[ 9] = [-1,-1, 1, 1, ...COLOR.L_BLUE]; // Bottom
-verts[10] = [-1,-1, 1, 1, ...COLOR.YELLOW]; // Front
-verts[11] = [-1,-1, 1, 1, ...COLOR.BLUE]; // Inner
+verts[ 8] = [-1,-1, 1, 1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[ 9] = [-1,-1, 1, 1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[10] = [-1,-1, 1, 1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[11] = [-1,-1, 1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[12] = [ 1,-1, 1, 1, ...COLOR.L_GREEN]; // Right
-verts[13] = [ 1,-1, 1, 1, ...COLOR.L_BLUE]; // Bottom
-verts[14] = [ 1,-1, 1, 1, ...COLOR.YELLOW]; // Front
-verts[15] = [ 1,-1, 1, 1, ...COLOR.BLUE]; // Inner
+verts[12] = [ 1,-1, 1, 1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[13] = [ 1,-1, 1, 1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[14] = [ 1,-1, 1, 1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[15] = [ 1,-1, 1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[16] = [ 1, 1,-1, 1, ...COLOR.L_GREEN]; // Right
-verts[17] = [ 1, 1,-1, 1, ...COLOR.RED]; // Top
-verts[18] = [ 1, 1,-1, 1, ...COLOR.GREEN]; // Back
-verts[19] = [ 1, 1,-1, 1, ...COLOR.BLUE]; // Inner
+verts[16] = [ 1, 1,-1, 1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[17] = [ 1, 1,-1, 1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[18] = [ 1, 1,-1, 1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[19] = [ 1, 1,-1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[20] = [-1, 1,-1, 1, ...COLOR.ORANGE]; // Left
-verts[21] = [-1, 1,-1, 1, ...COLOR.RED]; // Top
-verts[22] = [-1, 1,-1, 1, ...COLOR.GREEN]; // Back
-verts[23] = [-1, 1,-1, 1, ...COLOR.BLUE]; // Inner
+verts[20] = [-1, 1,-1, 1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[21] = [-1, 1,-1, 1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[22] = [-1, 1,-1, 1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[23] = [-1, 1,-1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[24] = [-1,-1,-1, 1, ...COLOR.ORANGE]; // Left
-verts[25] = [-1,-1,-1, 1, ...COLOR.L_BLUE]; // Bottom
-verts[26] = [-1,-1,-1, 1, ...COLOR.GREEN]; // Back
-verts[27] = [-1,-1,-1, 1, ...COLOR.BLUE]; // Inner
+verts[24] = [-1,-1,-1, 1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[25] = [-1,-1,-1, 1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[26] = [-1,-1,-1, 1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[27] = [-1,-1,-1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
-verts[28] = [ 1,-1,-1, 1, ...COLOR.L_GREEN]; // Right
-verts[29] = [ 1,-1,-1, 1, ...COLOR.L_BLUE]; // Bottom
-verts[30] = [ 1,-1,-1, 1, ...COLOR.GREEN]; // Back
-verts[31] = [ 1,-1,-1, 1, ...COLOR.BLUE]; // Inner
+verts[28] = [ 1,-1,-1, 1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[29] = [ 1,-1,-1, 1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[30] = [ 1,-1,-1, 1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[31] = [ 1,-1,-1, 1, ...COLOR.BLUE   , ...NORM.PW]; // Inner
 
 
-verts[32] = [ 1, 1, 1,-1, ...COLOR.L_GREEN]; // Right
-verts[33] = [ 1, 1, 1,-1, ...COLOR.RED]; // Top
-verts[34] = [ 1, 1, 1,-1, ...COLOR.YELLOW]; // Front
-verts[35] = [ 1, 1, 1,-1, ...COLOR.PURPLE]; // Outer
+verts[32] = [ 1, 1, 1,-1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[33] = [ 1, 1, 1,-1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[34] = [ 1, 1, 1,-1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[35] = [ 1, 1, 1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[36] = [-1, 1, 1,-1, ...COLOR.ORANGE]; // Left
-verts[37] = [-1, 1, 1,-1, ...COLOR.RED]; // Top
-verts[38] = [-1, 1, 1,-1, ...COLOR.YELLOW]; // Front
-verts[39] = [-1, 1, 1,-1, ...COLOR.PURPLE]; // Outer
+verts[36] = [-1, 1, 1,-1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[37] = [-1, 1, 1,-1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[38] = [-1, 1, 1,-1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[39] = [-1, 1, 1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[40] = [-1,-1, 1,-1, ...COLOR.ORANGE]; // Left
-verts[41] = [-1,-1, 1,-1, ...COLOR.L_BLUE]; // Bottom
-verts[42] = [-1,-1, 1,-1, ...COLOR.YELLOW]; // Front
-verts[43] = [-1,-1, 1,-1, ...COLOR.PURPLE]; // Outer
+verts[40] = [-1,-1, 1,-1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[41] = [-1,-1, 1,-1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[42] = [-1,-1, 1,-1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[43] = [-1,-1, 1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[44] = [ 1,-1, 1,-1, ...COLOR.L_GREEN]; // Right
-verts[45] = [ 1,-1, 1,-1, ...COLOR.L_BLUE]; // Bottom
-verts[46] = [ 1,-1, 1,-1, ...COLOR.YELLOW]; // Front
-verts[47] = [ 1,-1, 1,-1, ...COLOR.PURPLE]; // Outer
+verts[44] = [ 1,-1, 1,-1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[45] = [ 1,-1, 1,-1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[46] = [ 1,-1, 1,-1, ...COLOR.YELLOW , ...NORM.PZ]; // Front
+verts[47] = [ 1,-1, 1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[48] = [ 1, 1,-1,-1, ...COLOR.L_GREEN]; // Right
-verts[49] = [ 1, 1,-1,-1, ...COLOR.RED]; // Top
-verts[50] = [ 1, 1,-1,-1, ...COLOR.GREEN]; // Back
-verts[51] = [ 1, 1,-1,-1, ...COLOR.PURPLE]; // Outer
+verts[48] = [ 1, 1,-1,-1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[49] = [ 1, 1,-1,-1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[50] = [ 1, 1,-1,-1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[51] = [ 1, 1,-1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[52] = [-1, 1,-1,-1, ...COLOR.ORANGE]; // Left
-verts[53] = [-1, 1,-1,-1, ...COLOR.RED]; // Top
-verts[54] = [-1, 1,-1,-1, ...COLOR.GREEN]; // Back
-verts[55] = [-1, 1,-1,-1, ...COLOR.PURPLE]; // Outer
+verts[52] = [-1, 1,-1,-1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[53] = [-1, 1,-1,-1, ...COLOR.RED    , ...NORM.PY]; // Top
+verts[54] = [-1, 1,-1,-1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[55] = [-1, 1,-1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[56] = [-1,-1,-1,-1, ...COLOR.ORANGE]; // Left
-verts[57] = [-1,-1,-1,-1, ...COLOR.L_BLUE]; // Bottom
-verts[58] = [-1,-1,-1,-1, ...COLOR.GREEN]; // Back
-verts[59] = [-1,-1,-1,-1, ...COLOR.PURPLE]; // Outer
+verts[56] = [-1,-1,-1,-1, ...COLOR.ORANGE , ...NORM.NX]; // Left
+verts[57] = [-1,-1,-1,-1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[58] = [-1,-1,-1,-1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[59] = [-1,-1,-1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
-verts[60] = [ 1,-1,-1,-1, ...COLOR.L_GREEN]; // Right
-verts[61] = [ 1,-1,-1,-1, ...COLOR.L_BLUE]; // Bottom
-verts[62] = [ 1,-1,-1,-1, ...COLOR.GREEN]; // Back
-verts[63] = [ 1,-1,-1,-1, ...COLOR.PURPLE]; // Outer
+verts[60] = [ 1,-1,-1,-1, ...COLOR.L_GREEN, ...NORM.PX]; // Right
+verts[61] = [ 1,-1,-1,-1, ...COLOR.L_BLUE , ...NORM.NY]; // Bottom
+verts[62] = [ 1,-1,-1,-1, ...COLOR.GREEN  , ...NORM.NZ]; // Back
+verts[63] = [ 1,-1,-1,-1, ...COLOR.PURPLE , ...NORM.NW]; // Outer
 
 var const_rect_prism = (vts) => {
   if (vts.length != 8) return; // If incorrect number, ignore
@@ -145,7 +137,7 @@ function HTTP_Get(url, callback) {
   var req = new XMLHttpRequest();
   req.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-       callback(req.responseText.trim());
+        callback(req.responseText.trim());
     }
   };
   req.open("GET", url, true);
@@ -159,6 +151,7 @@ var c, gl;
 var program;
 var pos_attrib_loc, positionBuffer;
 var col_attrib_loc, colorBuffer;
+// var norm_attrib_loc, normalBuffer;
 var fragment_source, vertex_source;
 
 var r_XY = 0;
@@ -169,13 +162,16 @@ var r_YW = 0;
 var r_ZW = 0;
 
 function rotatePoint(pt, a, b, theta) {
-  var sp = pt.slice(0, 4); // Get The Spacial Coords
+  var sp = pt.slice(0);
 
   var sin_t = Math.sin(theta);
   var cos_t = Math.cos(theta);
 
   pt[a] = sp[a] * cos_t - sp[b] * sin_t;
   pt[b] = sp[b] * cos_t + sp[a] * sin_t;
+  
+  pt[a+7] = sp[a+7] * cos_t - sp[b+7] * sin_t;
+  pt[b+7] = sp[b+7] * cos_t + sp[a+7] * sin_t;
   return pt;
 }
 
@@ -224,11 +220,13 @@ function init() {
   var fragment_shader = createShader(gl, gl.FRAGMENT_SHADER, fragment_source);
   program = createProgram(gl, vertex_shader, fragment_shader);
   
-  pos_attrib_loc = gl.getAttribLocation(program, "a_position");
-  col_attrib_loc = gl.getAttribLocation(program, "a_color");
+  pos_attrib_loc  = gl.getAttribLocation(program, "a_position");
+  col_attrib_loc  = gl.getAttribLocation(program, "a_color");
+  // norm_attrib_loc = gl.getAttribLocation(program, "a_normal");
   
   positionBuffer = gl.createBuffer();
   colorBuffer = gl.createBuffer();
+  // normalBuffer = gl.createBuffer();
   
   // Assumed Correct
   const_rect_prism([ 3, 7,11,15,19,23,27,31]); // Inner
@@ -307,10 +305,12 @@ function render() {
   
   var positions = [];
   var colors = [];
+  var normals = [];
 
   vert3.forEach((v) => {
     positions = positions.concat(v.slice(0,3));
     colors = colors.concat(v.slice(4,7));
+    normals = normals.concat(v.slice(7,10));
   });
 
   positions = positions.map((p)=>p*0.5);
@@ -320,6 +320,9 @@ function render() {
 
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  
+  // gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -333,6 +336,10 @@ function render() {
   gl.enableVertexAttribArray(col_attrib_loc);
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   gl.vertexAttribPointer(col_attrib_loc, 3, gl.FLOAT, false, 0, 0);
+  
+  // gl.enableVertexAttribArray(norm_attrib_loc);
+  // gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  // gl.vertexAttribPointer(norm_attrib_loc, 3, gl.FLOAT, false, 0, 0); // Potential true
   
   gl.drawArrays(gl.TRIANGLES, 0, vert3.length);
 
