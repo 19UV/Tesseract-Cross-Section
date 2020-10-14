@@ -251,12 +251,12 @@ function render() {
   // W_LEVEL = Math.sin((new Date()).getTime() / 1000);
   
   // Should Fix Some Floating Point Errors
-  if (r_XY > RAD_360) r_XY -= RAD_360;
-  if (r_XZ > RAD_360) r_XZ -= RAD_360;
-  if (r_YZ > RAD_360) r_YZ -= RAD_360;
-  if (r_XW > RAD_360) r_XW -= RAD_360;
-  if (r_YW > RAD_360) r_YW -= RAD_360;
-  if (r_ZW > RAD_360) r_ZW -= RAD_360;
+  while(r_XY > RAD_360) r_XY -= RAD_360;
+  while(r_XZ > RAD_360) r_XZ -= RAD_360;
+  while(r_YZ > RAD_360) r_YZ -= RAD_360;
+  while(r_XW > RAD_360) r_XW -= RAD_360;
+  while(r_YW > RAD_360) r_YW -= RAD_360;
+  while(r_ZW > RAD_360) r_ZW -= RAD_360;
 
   var tri_count = 0; var quad_count = 0;
   
